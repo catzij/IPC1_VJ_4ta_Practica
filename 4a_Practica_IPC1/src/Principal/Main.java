@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Principal;
+import Ventanas.VentanaInicio;
 
 /**
  *
@@ -15,7 +16,13 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-    }
-    
+        
+        //instanciamos
+        VentanaInicio inicio = new VentanaInicio();
+        
+        inicio.setVisible(true);// que se vea
+        inicio.setResizable(false);// que no sea modificable su tamaño
+        inicio.setLocationRelativeTo(null);//se ubica ene l centro
+
+    }    
 }
