@@ -17,7 +17,20 @@ public class Juego  implements ActionListener{
     
     public static int TiempoDelJuego[] = new int[]{0, 0, 0};// tiempo horas, minutos, segundo
 
-    public static JTextField DatosNIckOror = new JTextField();//para mostrar el nombre y nickname        
+    public static JTextField JUGADORES = new JTextField();//para mostrar el nombre y nickname               
+    
+    private static final ImageIcon DADO_CARA_1 = new ImageIcon("imagenes/DADOS_cara_1.png");
+    private static final ImageIcon DADO_CARA_2 = new ImageIcon("imagenes/DADOS_cara_2.png");
+    private static final ImageIcon DADO_CARA_3 = new ImageIcon("imagenes/DADOS_cara_3.png");
+    private static final ImageIcon DADO_CARA_4 = new ImageIcon("imagenes/DADOS_cara_4.png");
+    private static final ImageIcon DADO_CARA_5 = new ImageIcon("imagenes/DADOS_cara_5.png");
+    private static final ImageIcon DADO_CARA_6 = new ImageIcon("imagenes/DADOS_cara_6.png");
+    private static final ImageIcon FONDO_CUADRO_AMARILLO = new ImageIcon("imagenes/amarillo.jpg");
+    private static final ImageIcon FONDO_CUADRO_CELESTE = new ImageIcon("imagenes/celeste.jpg");
+    
+    public static JLabel Imagen;
+    private static JLabel DADO1;
+    private static JLabel DADO2;
 
     private JButton Regresar;
     private JButton TirarDados;    
@@ -77,9 +90,31 @@ public class Juego  implements ActionListener{
         TirarDados = new JButton();
         TirarDados.setText("Tirar Dados");
         TirarDados.setFont(new Font(("cooper black"),0,50));
-        TirarDados.setBounds(10,110,380,100);
+        TirarDados.setBounds(10,PanelDerecho.getHeight()-300,380,100);
         TirarDados.addActionListener(this);
         PanelDerecho.add(TirarDados);
+        //fin botones
+        
+        //label dados
+        DADO1 = new JLabel();
+        //labelDados.setText("DADO 1");
+        //labelDados.setFont(new Font(("cooper black"),0,50));
+        DADO1.setBounds(0,PanelDerecho.getHeight()-200, 200, 200);
+        //labelDados.setBackground(Color.red);
+        //labelDados.setOpaque(true);        
+        DADO1.setIcon(new ImageIcon(DADO_CARA_6.getImage().getScaledInstance(DADO1.getWidth(), DADO1.getHeight(), Image.SCALE_SMOOTH)));
+        //labelDados.add(Imagen);
+        PanelDerecho.add(DADO1);
+        
+        DADO2 = new JLabel();
+        //labelDados1.setText("DADO 1");
+        //labelDados1.setFont(new Font(("cooper black"),0,50));
+        DADO2.setBounds(200,PanelDerecho.getHeight()-200, 200, 200);
+        //labelDados1.setBackground(Color.GREEN);
+        DADO2.setIcon(new ImageIcon(DADO_CARA_6.getImage().getScaledInstance(DADO2.getWidth(), DADO2.getHeight(), Image.SCALE_SMOOTH)));
+        DADO2.setOpaque(true);
+        PanelDerecho.add(DADO2);
+        
         
     }//FIN CONSTRUCTOR
     
@@ -104,11 +139,37 @@ public class Juego  implements ActionListener{
     }
 
     @Override
-    public void actionPerformed(ActionEvent Presionar) {        
+    public void actionPerformed(ActionEvent Presionar) {
         
         if (Presionar.getSource() == Regresar) {
             Regresar();
         }
+        if (Presionar.getSource() == TirarDados) {
+            DADO1.setIcon(new ImageIcon(seleccionDado().getImage().getScaledInstance(DADO1.getWidth(), DADO1.getHeight(), Image.SCALE_SMOOTH)));
+            DADO2.setIcon(new ImageIcon(seleccionDado().getImage().getScaledInstance(DADO2.getWidth(), DADO2.getHeight(), Image.SCALE_SMOOTH)));
+            
+        }
+    }
+
+    public ImageIcon seleccionDado(){
+        int numero = (int)(Math.random()*6);
+        
+        switch(numero){
+            case 0:
+                return DADO_CARA_1;
+            case 1:
+                return DADO_CARA_2;
+            case 2:
+                return DADO_CARA_3;
+            case 3:
+                return DADO_CARA_4;
+            case 4:
+                return DADO_CARA_5;
+            case 5:    
+                return DADO_CARA_6;
+            default :
+                return DADO_CARA_6;                
+        }                
     }
     
     private void Regresar() {
