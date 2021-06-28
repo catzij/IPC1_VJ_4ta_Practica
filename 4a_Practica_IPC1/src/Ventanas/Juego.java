@@ -27,6 +27,12 @@ public class Juego  implements ActionListener{
     private static final ImageIcon DADO_CARA_6 = new ImageIcon("imagenes/DADOS_cara_6.png");
     private static final ImageIcon FONDO_CUADRO_AMARILLO = new ImageIcon("imagenes/amarillo.jpg");
     private static final ImageIcon FONDO_CUADRO_CELESTE = new ImageIcon("imagenes/celeste.jpg");
+    private static final ImageIcon FICHA1 = new ImageIcon("imagenes/FICHA1.png");
+    private static final ImageIcon FICHA2 = new ImageIcon("imagenes/FICHA2.jpg");
+    private static final ImageIcon FICHA3 = new ImageIcon("imagenes/FICHA3.jpg");
+    private static final ImageIcon FICHA4 = new ImageIcon("imagenes/FICHA4.jpg");
+    private static final ImageIcon FICHA5 = new ImageIcon("imagenes/FICHA5.jpg");
+    private static final ImageIcon FICHA6 = new ImageIcon("imagenes/FICHA6.jpg");
     
     private static JLabel Imagen;
     private static JLabel DADO1;
@@ -82,34 +88,40 @@ public class Juego  implements ActionListener{
                         cuadro[i][j].setIcon(new ImageIcon(FONDO_CUADRO_AMARILLO.getImage().getScaledInstance(cuadro[i][j].getWidth(), cuadro[i][j].getHeight(), Image.SCALE_SMOOTH)));
                     }
                 }
-                this.TABLA.add(cuadro[i][j]);
+                TABLA.add(cuadro[i][j]);
+                
+                //agregado numeracion a los cuadro visual
                 numeroCuadro[i][j] = new JLabel();
-                numeroCuadro[i][j].setOpaque(true);//que se pueda cabmiar el color de fondo
-                numeroCuadro[i][j].setBackground(Color.BLACK);//color fondo
+                //numeroCuadro[i][j].setOpaque(true);//que se pueda cabmiar el color de fondo
+                //numeroCuadro[i][j].setBackground(Color.BLACK);//color fondo
                 numero = NumeroCuadro(i,numero);
                 numeroCuadro[i][j].setText(""+numero);
                 numeroCuadro[i][j].setHorizontalAlignment(SwingConstants.CENTER);
-                numeroCuadro[i][j].setForeground(Color.white);//color letra
-                numeroCuadro[i][j].setBounds(0,0,25,10);
+                numeroCuadro[i][j].setForeground(Color.BLACK);//color letra
+                numeroCuadro[i][j].setBounds(cuadro[i][j].getWidth()-45,cuadro[i][j].getHeight()-30,25,10);//posicionX,posicionY,tamañoX,tamañoY
                 numeroCuadro[i][j].setVisible(true);
                 cuadro[i][j].add(numeroCuadro[i][j]);
             }   
         }
         
-        for (int i = 0; i < numeroCuadro.length; i++) {
+        fichaCuadro1[0][0] = new JLabel();
+        fichaCuadro1[0][0].setBounds(0,0,20,20);
+        fichaCuadro1[0][0].setIcon(new ImageIcon(FICHA1.getImage().getScaledInstance(fichaCuadro1[0][0].getWidth(), fichaCuadro1[0][0].getHeight(), Image.SCALE_SMOOTH)));
+        cuadro[0][0].add(fichaCuadro1[0][0]);
+        
+        /*for (int i = 0; i < numeroCuadro.length; i++) {
             for (int j = 0; j < numeroCuadro.length; j++) {
                 
                 panel[i][j] = new JPanel();
                 panel[i][j].setBounds(15+(j*65),TABLA.getHeight()-(i*70),25,10);
                 panel[i][j].setLayout(null);
                 panel[i][j].setVisible(true);
-                cuadro[i][j].add(panel[i][j]);
-                                
+                cuadro[i][j].add(panel[i][j]);                                
                 
                 //TABLA.add(numeroCuadro[i][j]);
                 //panel[i][j].add(numeroCuadro[i][j]);
             }
-        }   
+        }*/   
         
         //FIN TABLERO JUEGO
         
