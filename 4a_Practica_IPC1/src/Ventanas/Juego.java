@@ -28,7 +28,7 @@ public class Juego  implements ActionListener{
     private static final ImageIcon FONDO_CUADRO_AMARILLO = new ImageIcon("imagenes/amarillo.jpg");
     private static final ImageIcon FONDO_CUADRO_CELESTE = new ImageIcon("imagenes/celeste.jpg");
     
-    public static JLabel Imagen;
+    private static JLabel Imagen;
     private static JLabel DADO1;
     private static JLabel DADO2;
 
@@ -38,10 +38,14 @@ public class Juego  implements ActionListener{
     private static JPanel PanelDerecho = new JPanel();
     private static JPanel TABLA = new JPanel();
     
-    private JLabel[][] cuadro = new JLabel[10][10];
     
     //CONSTRUCTOR
     public Juego(){
+        
+    JLabel[][] cuadro = new JLabel[10][10];
+    JLabel[][] numeroCuadro = new JLabel[10][10];
+    JLabel[][] fichaCuadro1 = new JLabel[10][10];
+    JPanel[][] panel = new JPanel[10][10];    
                 
         // un panel a la derecha para colocar las accion del usario
         PanelDerecho.setLayout(null);// anular la ubicacion que da java
@@ -55,26 +59,58 @@ public class Juego  implements ActionListener{
         TABLA.setLayout(null);
         TABLA.setVisible(true);
         TABLA.setBounds(80, 20, 650,650 );
-        TABLA.setBackground(Color.DARK_GRAY);
+        TABLA.setBackground(Color.WHITE);
         VentanaInicio.PANEL_MENU_JUEGO.add(TABLA);
         
-        int numero = 0;        
+        int numero = 0;
         for (int i = 0; i < cuadro.length; i++) {
-            for (int j = 0; j < cuadro.length; j++) {                
-                
-                numero = numeroFicha(i,numero);                
+            for (int j = 0; j < cuadro.length; j++){
             
                 cuadro[i][j] = new JLabel();
                 cuadro[i][j].setOpaque(true);
-                //cuadro[i][j].setText(i+"#"+j);
-                cuadro[i][j].setText(""+numero);
-                cuadro[i][j].setHorizontalAlignment(SwingConstants.CENTER);
-                cuadro[i][j].setForeground(Color.WHITE);//color letra
-                cuadro[i][j].setBackground(Color.BLACK);//color fondo
                 cuadro[i][j].setBounds(5+(j*65),TABLA.getHeight()-60-(i*65),55,55);
-                TABLA.add(cuadro[i][j]);
+                if (i%2==0) {
+                    if (j%2==0) {
+                        cuadro[i][j].setIcon(new ImageIcon(FONDO_CUADRO_AMARILLO.getImage().getScaledInstance(cuadro[i][j].getWidth(), cuadro[i][j].getHeight(), Image.SCALE_SMOOTH)));
+                    }else{
+                        cuadro[i][j].setIcon(new ImageIcon(FONDO_CUADRO_CELESTE.getImage().getScaledInstance(cuadro[i][j].getWidth(), cuadro[i][j].getHeight(), Image.SCALE_SMOOTH)));
+                    }
+                }else{
+                    if (j%2==0) {
+                        cuadro[i][j].setIcon(new ImageIcon(FONDO_CUADRO_CELESTE.getImage().getScaledInstance(cuadro[i][j].getWidth(), cuadro[i][j].getHeight(), Image.SCALE_SMOOTH)));
+                    }else{
+                        cuadro[i][j].setIcon(new ImageIcon(FONDO_CUADRO_AMARILLO.getImage().getScaledInstance(cuadro[i][j].getWidth(), cuadro[i][j].getHeight(), Image.SCALE_SMOOTH)));
+                    }
+                }
+                this.TABLA.add(cuadro[i][j]);
+                numeroCuadro[i][j] = new JLabel();
+                numeroCuadro[i][j].setOpaque(true);//que se pueda cabmiar el color de fondo
+                numeroCuadro[i][j].setBackground(Color.BLACK);//color fondo
+                numero = NumeroCuadro(i,numero);
+                numeroCuadro[i][j].setText(""+numero);
+                numeroCuadro[i][j].setHorizontalAlignment(SwingConstants.CENTER);
+                numeroCuadro[i][j].setForeground(Color.white);//color letra
+                numeroCuadro[i][j].setBounds(0,0,25,10);
+                numeroCuadro[i][j].setVisible(true);
+                cuadro[i][j].add(numeroCuadro[i][j]);
+            }   
+        }
+        
+        for (int i = 0; i < numeroCuadro.length; i++) {
+            for (int j = 0; j < numeroCuadro.length; j++) {
+                
+                panel[i][j] = new JPanel();
+                panel[i][j].setBounds(15+(j*65),TABLA.getHeight()-(i*70),25,10);
+                panel[i][j].setLayout(null);
+                panel[i][j].setVisible(true);
+                cuadro[i][j].add(panel[i][j]);
+                                
+                
+                //TABLA.add(numeroCuadro[i][j]);
+                //panel[i][j].add(numeroCuadro[i][j]);
             }
-        }        
+        }   
+        
         //FIN TABLERO JUEGO
         
         //botones
@@ -113,24 +149,26 @@ public class Juego  implements ActionListener{
         //labelDados1.setBackground(Color.GREEN);
         DADO2.setIcon(new ImageIcon(DADO_CARA_6.getImage().getScaledInstance(DADO2.getWidth(), DADO2.getHeight(), Image.SCALE_SMOOTH)));
         DADO2.setOpaque(true);
-        PanelDerecho.add(DADO2);
-        
+        PanelDerecho.add(DADO2);        
         
     }//FIN CONSTRUCTOR
     
-    public int numeroFicha(int fila, int valor){
+    public void agregarColorTabla(){
+    }
+    
+    public int NumeroCuadro(int fila, int valor){
         
         int numero = valor;
         if (fila%2==0) {//0,2,4,6,8,
-            if (numero == 11 || numero == 31 || numero == 51 || numero == 71 || numero == 91) {
+            if (numero == 11 || numero == 31 || numero == 51 || numero == 71 || numero == 91){
                 numero+=10;
             }else{
                     numero++;
             }
             
         }else{//1,3,5,7,9
-            if (numero == 10 || numero == 30||numero == 50 || numero == 70 || numero == 90) {
-            numero+=10;
+            if (numero == 10 || numero == 30 || numero == 50 || numero == 70 || numero == 90){
+                numero+=10;
             }else{
                 numero--;
             }            
@@ -146,8 +184,7 @@ public class Juego  implements ActionListener{
         }
         if (Presionar.getSource() == TirarDados) {
             DADO1.setIcon(new ImageIcon(seleccionDado().getImage().getScaledInstance(DADO1.getWidth(), DADO1.getHeight(), Image.SCALE_SMOOTH)));
-            DADO2.setIcon(new ImageIcon(seleccionDado().getImage().getScaledInstance(DADO2.getWidth(), DADO2.getHeight(), Image.SCALE_SMOOTH)));
-            
+            DADO2.setIcon(new ImageIcon(seleccionDado().getImage().getScaledInstance(DADO2.getWidth(), DADO2.getHeight(), Image.SCALE_SMOOTH)));            
         }
     }
 
@@ -165,11 +202,11 @@ public class Juego  implements ActionListener{
                 return DADO_CARA_4;
             case 4:
                 return DADO_CARA_5;
-            case 5:    
+            case 5:
                 return DADO_CARA_6;
             default :
-                return DADO_CARA_6;                
-        }                
+                return DADO_CARA_6;
+        }
     }
     
     private void Regresar() {
