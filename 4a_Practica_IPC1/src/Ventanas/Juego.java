@@ -42,17 +42,16 @@ public class Juego  implements ActionListener{
     private JButton TirarDados;    
     
     private static JPanel PanelDerecho = new JPanel();
-    private static JPanel TABLA = new JPanel();
+    public static JPanel TABLA = new JPanel();
     
+    public  JLabel[][] cuadro = new JLabel[10][10];
+    JLabel[][] numeroCuadro = new JLabel[10][10];//NUMERO DE CUADRO
+    JLabel[][] fichaCuadro1 = new JLabel[10][10];
+    JPanel[][] panel = new JPanel[10][10];
     
     //CONSTRUCTOR
-    public Juego(){
+    public Juego(){                
         
-    JLabel[][] cuadro = new JLabel[10][10];
-    JLabel[][] numeroCuadro = new JLabel[10][10];
-    JLabel[][] fichaCuadro1 = new JLabel[10][10];
-    JPanel[][] panel = new JPanel[10][10];    
-                
         // un panel a la derecha para colocar las accion del usario
         PanelDerecho.setLayout(null);// anular la ubicacion que da java
         PanelDerecho.setVisible(true);//visibilidad del panel
@@ -101,7 +100,7 @@ public class Juego  implements ActionListener{
                 numeroCuadro[i][j].setBounds(cuadro[i][j].getWidth()-45,cuadro[i][j].getHeight()-30,25,10);//posicionX,posicionY,tamañoX,tamañoY
                 numeroCuadro[i][j].setVisible(true);
                 cuadro[i][j].add(numeroCuadro[i][j]);
-            }   
+            }
         }
         
         fichaCuadro1[0][0] = new JLabel();

@@ -11,8 +11,8 @@ public class Main {
         //instanciamos        
         
         inicio.setVisible(true);// que se vea
-        inicio.setResizable(false);// que no sea modificable su tamaño
-        inicio.setLocationRelativeTo(null);//se ubica en el centro
+        inicio.setResizable(false);// que no sea modificable su tamaño        
+        inicio.CentrarPanel();
 
     }    
 }

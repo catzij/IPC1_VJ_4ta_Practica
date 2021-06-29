@@ -34,10 +34,9 @@ public class Reportes implements ActionListener {
         Regresar.addActionListener(this);
         PanelDerecho.add(Regresar);
         
-    }//FIN CONSTRUCTOR
+    }//FIN CONSTRUCTOR    
     
-    
-    private void Regresar() {        
+    private void Regresar() {
 
         Main.inicio.setSize(VentanaInicio.PANEL_MENU_PRINCIPAL.getWidth(), VentanaInicio.PANEL_MENU_PRINCIPAL.getHeight());
         VentanaInicio.ImagenDeFondo.setBounds(0, 0, VentanaInicio.PANEL_MENU_PRINCIPAL.getWidth(), VentanaInicio.PANEL_MENU_PRINCIPAL.getHeight());
@@ -54,6 +53,6 @@ public class Reportes implements ActionListener {
         
         if (e.getSource() == Regresar) {
             Regresar();
-        }        
-    }    
+        }
+    }
 }
