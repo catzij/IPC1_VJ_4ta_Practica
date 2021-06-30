@@ -191,17 +191,5 @@ public class VentanaInicio extends JFrame implements ActionListener {
         if (e.getSource() == Botones[2]) {// boton salir
             System.exit(0);
         }
-    }
-
-    public void algo(){
-        
-            setTitle("*** JUGAR ***");//desaparcer el dar nombre a la ventan
-            setSize(PANEL_MENU_JUEGO.getWidth(), PANEL_MENU_JUEGO.getHeight());//desaparcer dar un nuevo tamañao
-            setLocationRelativeTo(null);
-            ImagenDeFondo.setBounds(0, 0, PANEL_MENU_JUEGO.getWidth(), PANEL_MENU_JUEGO.getHeight());// Cambiar las dimencionales del fondo
-            ImagenDeFondo.setIcon(new ImageIcon(IMAGEN_TABLERO.getImage().getScaledInstance(ImagenDeFondo.getWidth(), ImagenDeFondo.getHeight(), Image.SCALE_SMOOTH)));// Cambiar el fondo            
-            PANEL_MENU_JUEGO.add(ImagenDeFondo);
-            PANEL_MENU_JUEGO.setVisible(true);// que se vea el panel
-            PANEL_MENU_DATOS.setVisible(false);// que NO se vea el panel            
     }    
 }

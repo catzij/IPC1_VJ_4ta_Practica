@@ -1,24 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Proceso;
 
-/**
- *
- * @author catzi
- */
+import Ventanas.Juego;
+import javax.swing.JOptionPane;
+
 public class Jugador extends Fichas{
     
     private String nombre;
+    private int lugar;
     private int turno;
     private int tableroXI;
     private int tableroYI;
     private int tableroXF;
     private int tableroYF;
-    private int contadorSeis;
-    //private InterfazConsola interfaz = new InterfazConsola();
+    private boolean PierdeTurno=false;
+    private int instanciaJugador;
+    
+    Juego jugador;
     
     public Jugador(String nombre, int lugar, int posicionX, int posicionY, int tableroXF, int tableroYF) {
         this.nombre = nombre;
@@ -28,94 +25,45 @@ public class Jugador extends Fichas{
         this.turno = lugar;
         this.tableroXF = tableroXF;
         this.tableroYF = tableroYF;
+        instanciaJugador++;
+    }
+    public Jugador(String nombre, int lugar ){
+        this.lugar = lugar;
+        this.nombre = nombre;
+    }
+
+    public int getLugar() {
+        return lugar;
+    }
+    public int getInstanciaJugador() {
+        return instanciaJugador;
     }
     
-    /**
-     * Revisa si el dado cayo tres veces seis
-     * @param movimientos 
-     */
-    /*
-    private void dadoTresVecesSeis(int movimientos) {
-        if (contadorSeis != 3) {
-            if (movimientos == 6) {
-                contadorSeis++;
-                if(contadorSeis == 3) {
-                    posicionX = tableroXI;
-                    posicionY = tableroYI;
-                    interfaz.mostrarAviso("El jugador("+(turno+1)+") llamado "+nombre+" ha sacado 3 veces seguidas 6. Se le enviara al inicio del tablero.");
-                }
-            } else {
-                contadorSeis = 0;
-            }
-        } else {
-            if (movimientos != 6) {
-                interfaz.mostrarAviso("El jugador("+(turno+1)+") llamado "+nombre+" no ha sacado un 6. Por lo cual no se mueve. Ya que habia sacado 3 veces 6");
-                posicionX = tableroXI;
-                posicionY = tableroYI;
-            } else {
-                interfaz.mostrarAviso("El jugador("+(turno+1)+") llamado "+nombre+" ha sacado un 6. Ahora se puede mover");
-                contadorSeis = 0;
-            }
+    private void PierdeTurno(int posicionX,int posicionY) {
+        if (PierdeTurno) {
+            JOptionPane.showMessageDialog(null, "El jugador "+getNombre()+" Pierde Turno");
         }
     }
-    */
-    /**
-     * Funcion mover Jugador. Mueve la ficha jugador a la siguiente casilla 
-     * correspondiente a la forma del tablero.
-     * 
-     * Si posicionX es par se ejecutara un algoritmo propio.
-     * Si posicionX es impar: se ejecutara un algoritmo diferente al par
-     * 
-     * @param movimientos 
+
+    public int SaberXdeCuadros(int numero){        
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (numero == jugador.controlNumeroCuadro[i][j]) {
+                    return i;
+                }                
+            }
+        }        
+        return 0;
     }
-    */
-    /*
-    public void mover(int movimientos) {
-        int posicionAnteriorX = posicionX, posicionAnteriorY = posicionY, movimientosAnterior = movimientos;
-        if(posicionX % 2 != 0) {
-            if (!((posicionY + movimientos > tableroYF) && (posicionX == tableroXF))) {
-                if(posicionY + movimientos > 7) {
-                    while(posicionY != 7) {
-                        posicionY++;
-                        movimientos--;
-                    }
-                    posicionY = 8-movimientos;
-                    posicionX--;
-                    if (tableroXF == posicionX && tableroYF > posicionY) {
-                        posicionY = posicionAnteriorY;
-                        posicionX = posicionAnteriorX;
-                        interfaz.mostrarAviso("El jugador("+(turno+1)+") llamado "+nombre+" se ha pasado de la casilla final, por lo cual no se mueve");
-                    }
-                } else {
-                    posicionY = posicionY + movimientos;
-                }
-                interfaz.mostrarAviso("El jugador("+(turno+1)+") llamado "+nombre+" se ha movido "+movimientosAnterior+" movimientos(s)");
-            } else {
-                 interfaz.mostrarAviso("El jugador("+(turno+1)+") llamado "+nombre+" se ha pasado de la casilla final, por lo cual no se mueve");
+    public int SaberYdeCuadros(int numero){
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (numero == jugador.controlNumeroCuadro[i][j]) {
+                    return j;
+                }     
             }
-        } else {
-            if (!((posicionY - movimientos < tableroYF) && (posicionX == tableroXF))) {
-                if(posicionY - movimientos < 0) {
-                    while(posicionY != 0) {
-                        posicionY--;
-                        movimientos--;
-                    }
-                    posicionY = posicionY + movimientos -1;
-                    posicionX--;
-                    if (tableroXF == posicionX && tableroYF < posicionY) {
-                        posicionY = posicionAnteriorY;
-                        posicionX = posicionAnteriorX;
-                        interfaz.mostrarAviso("El jugador("+(turno+1)+") llamado "+nombre+" se ha pasado de la casilla final, por lo cual no se mueve");
-                    }
-                } else {
-                    posicionY = posicionY - movimientos;
-                }
-                interfaz.mostrarAviso("El jugador("+(turno+1)+") llamado "+nombre+" se ha movido "+movimientosAnterior+" movimientos(s)");
-            } else { // Revisar eliminar despues de terminar el proyecto
-                interfaz.mostrarAviso("El jugador("+(turno+1)+") llamado "+nombre+" se ha pasado de la casilla final, por lo cual no se mueve");
-            }
-        }
-        dadoTresVecesSeis(movimientosAnterior);
+        }        
+        return 0;        
     }
 
     public String getNombre() {
@@ -129,5 +77,10 @@ public class Jugador extends Fichas{
     public void setTurno(int turno) {
         this.turno = turno;
     }
-/**/    
+
+    public void ganador() {
+       if (lugar>=100) {
+            JOptionPane.showMessageDialog(null, "El jugador "+getNombre()+" GANO !!!");
+        }
+    }
 }

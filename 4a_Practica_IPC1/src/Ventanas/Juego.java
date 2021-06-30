@@ -1,5 +1,6 @@
 package Ventanas;
 
+import Proceso.*;
 import Principal.Main;
 import java.awt.Color;
 import java.awt.Font;
@@ -15,8 +16,6 @@ import javax.swing.SwingConstants;
 
 public class Juego  implements ActionListener{
     
-    public static int TiempoDelJuego[] = new int[]{0, 0, 0};// tiempo horas, minutos, segundo
-
     public static JTextField JUGADORES = new JTextField();//para mostrar el nombre y nickname               
     
     private static final ImageIcon DADO_CARA_1 = new ImageIcon("imagenes/DADOS_cara_1.png");
@@ -28,13 +27,12 @@ public class Juego  implements ActionListener{
     private static final ImageIcon FONDO_CUADRO_AMARILLO = new ImageIcon("imagenes/amarillo.jpg");
     private static final ImageIcon FONDO_CUADRO_CELESTE = new ImageIcon("imagenes/celeste.jpg");
     private static final ImageIcon FICHA1 = new ImageIcon("imagenes/FICHA1.png");
-    private static final ImageIcon FICHA2 = new ImageIcon("imagenes/FICHA2.jpg");
-    private static final ImageIcon FICHA3 = new ImageIcon("imagenes/FICHA3.jpg");
-    private static final ImageIcon FICHA4 = new ImageIcon("imagenes/FICHA4.jpg");
-    private static final ImageIcon FICHA5 = new ImageIcon("imagenes/FICHA5.jpg");
-    private static final ImageIcon FICHA6 = new ImageIcon("imagenes/FICHA6.jpg");
-    
-    private static JLabel Imagen;
+    private static final ImageIcon FICHA2 = new ImageIcon("imagenes/FICHA2.png");
+    private static final ImageIcon FICHA3 = new ImageIcon("imagenes/FICHA3.png");
+    private static final ImageIcon FICHA4 = new ImageIcon("imagenes/FICHA4.png");
+    private static final ImageIcon FICHA5 = new ImageIcon("imagenes/FICHA5.png");
+    private static final ImageIcon FICHA6 = new ImageIcon("imagenes/FICHA6.png");
+        
     private static JLabel DADO1;
     private static JLabel DADO2;
 
@@ -44,13 +42,36 @@ public class Juego  implements ActionListener{
     private static JPanel PanelDerecho = new JPanel();
     public static JPanel TABLA = new JPanel();
     
-    public  JLabel[][] cuadro = new JLabel[10][10];
-    JLabel[][] numeroCuadro = new JLabel[10][10];//NUMERO DE CUADRO
-    JLabel[][] fichaCuadro1 = new JLabel[10][10];
+    protected JLabel[][] cuadro = new JLabel[10][10];
+    JLabel[][] numeroCuadro = new JLabel[10][10]; 
+    public int[][] controlNumeroCuadro = new int[10][10];
+    
+    JLabel fichaCuadro1; 
+    JLabel fichaCuadro2; 
+    JLabel fichaCuadro3; 
+    JLabel fichaCuadro4; 
+    JLabel fichaCuadro5; 
+    JLabel fichaCuadro6; 
+    
     JPanel[][] panel = new JPanel[10][10];
     
-    //CONSTRUCTOR
-    public Juego(){                
+    private int turnoJugador = 1;    
+    int contador1 = 1;
+    int contador2 = 1;
+    int contador3 = 1;
+    int contador4 = 1;
+    int contador5 = 1;
+    int contador6 = 1;
+    int suma2Dados = 0;
+    int sumaDados = 0;
+    
+    private Jugador JUGADOR;
+//  private AntesDeJugar Njugador;    
+    private int jugadores=5;
+    private Jugador[] newJugador = new Jugador[jugadores];
+    //private newJugador = new Jugador[jugadores];
+    //CONSTRUCTOR*************************************************************************
+    public Juego(){        
         
         // un panel a la derecha para colocar las accion del usario
         PanelDerecho.setLayout(null);// anular la ubicacion que da java
@@ -67,6 +88,49 @@ public class Juego  implements ActionListener{
         TABLA.setBackground(Color.WHITE);
         VentanaInicio.PANEL_MENU_JUEGO.add(TABLA);
         
+        agregarCuadros();        
+        inicialVisual();        
+        //FIN TABLERO JUEGO
+        
+        //botones
+            //BOTON REGRESAR AL MENU PRINCIPAL
+        Regresar = new JButton();
+        Regresar.setFont(new Font(("cooper black"),0,50));
+        Regresar.setText("Regresar");
+        Regresar.setBounds(10, 10, 380, 100);
+        Regresar.addActionListener(this);
+        PanelDerecho.add(Regresar);        
+            //FIN BOTON REGRESAR
+            //BOTON TIRAR DADOS
+        TirarDados = new JButton();
+        TirarDados.setText("Tirar Dados");
+        TirarDados.setFont(new Font(("cooper black"),0,50));
+        TirarDados.setBounds(10,PanelDerecho.getHeight()-300,380,100);
+        TirarDados.addActionListener(this);
+        PanelDerecho.add(TirarDados);
+        //fin botones
+        
+        //label dados
+        DADO1 = new JLabel();
+        DADO1.setBounds(0,PanelDerecho.getHeight()-200, 200, 200);
+        DADO1.setIcon(new ImageIcon(DADO_CARA_6.getImage().getScaledInstance(DADO1.getWidth(), DADO1.getHeight(), Image.SCALE_SMOOTH)));
+        PanelDerecho.add(DADO1);
+        
+        DADO2 = new JLabel();
+        DADO2.setBounds(200,PanelDerecho.getHeight()-200, 200, 200);        
+        DADO2.setIcon(new ImageIcon(DADO_CARA_6.getImage().getScaledInstance(DADO2.getWidth(), DADO2.getHeight(), Image.SCALE_SMOOTH)));        
+        PanelDerecho.add(DADO2);
+        
+    }//FIN CONSTRUCTOR
+    
+    public void NuevoJugador(){        
+        //jugadores = Njugador.getContadorMANDAR();
+        for (int i = 0; i < newJugador.length; i++) {
+            newJugador[i] = new Jugador("JUGADOR ["+JUGADOR.getInstanciaJugador()+"]",1);
+        }
+    }    
+    
+    public void agregarCuadros(){
         int numero = 0;
         for (int i = 0; i < cuadro.length; i++) {
             for (int j = 0; j < cuadro.length; j++){
@@ -90,10 +154,9 @@ public class Juego  implements ActionListener{
                 TABLA.add(cuadro[i][j]);
                 
                 //agregado numeracion a los cuadro visual
-                numeroCuadro[i][j] = new JLabel();
-                //numeroCuadro[i][j].setOpaque(true);//que se pueda cabmiar el color de fondo
-                //numeroCuadro[i][j].setBackground(Color.BLACK);//color fondo
+                numeroCuadro[i][j] = new JLabel();                
                 numero = NumeroCuadro(i,numero);
+                controlNumeroCuadro[i][j] = numero;                        
                 numeroCuadro[i][j].setText(""+numero);
                 numeroCuadro[i][j].setHorizontalAlignment(SwingConstants.CENTER);
                 numeroCuadro[i][j].setForeground(Color.BLACK);//color letra
@@ -102,71 +165,82 @@ public class Juego  implements ActionListener{
                 cuadro[i][j].add(numeroCuadro[i][j]);
             }
         }
-        
-        fichaCuadro1[0][0] = new JLabel();
-        fichaCuadro1[0][0].setBounds(0,0,20,20);
-        fichaCuadro1[0][0].setIcon(new ImageIcon(FICHA1.getImage().getScaledInstance(fichaCuadro1[0][0].getWidth(), fichaCuadro1[0][0].getHeight(), Image.SCALE_SMOOTH)));
-        cuadro[0][0].add(fichaCuadro1[0][0]);
-        
-        /*for (int i = 0; i < numeroCuadro.length; i++) {
-            for (int j = 0; j < numeroCuadro.length; j++) {
-                
-                panel[i][j] = new JPanel();
-                panel[i][j].setBounds(15+(j*65),TABLA.getHeight()-(i*70),25,10);
-                panel[i][j].setLayout(null);
-                panel[i][j].setVisible(true);
-                cuadro[i][j].add(panel[i][j]);                                
-                
-                //TABLA.add(numeroCuadro[i][j]);
-                //panel[i][j].add(numeroCuadro[i][j]);
-            }
-        }*/   
-        
-        //FIN TABLERO JUEGO
-        
-        //botones
-            //BOTON REGRESAR AL MENU PRINCIPAL
-        Regresar = new JButton();
-        Regresar.setFont(new Font(("cooper black"),0,50));
-        Regresar.setText("Regresar");
-        Regresar.setBounds(10, 10, 380, 100);
-        Regresar.addActionListener(this);
-        PanelDerecho.add(Regresar);        
-            //FIN BOTON REGRESAR
-            //BOTON TIRAR DADOS
-        TirarDados = new JButton();
-        TirarDados.setText("Tirar Dados");
-        TirarDados.setFont(new Font(("cooper black"),0,50));
-        TirarDados.setBounds(10,PanelDerecho.getHeight()-300,380,100);
-        TirarDados.addActionListener(this);
-        PanelDerecho.add(TirarDados);
-        //fin botones
-        
-        //label dados
-        DADO1 = new JLabel();
-        //labelDados.setText("DADO 1");
-        //labelDados.setFont(new Font(("cooper black"),0,50));
-        DADO1.setBounds(0,PanelDerecho.getHeight()-200, 200, 200);
-        //labelDados.setBackground(Color.red);
-        //labelDados.setOpaque(true);        
-        DADO1.setIcon(new ImageIcon(DADO_CARA_6.getImage().getScaledInstance(DADO1.getWidth(), DADO1.getHeight(), Image.SCALE_SMOOTH)));
-        //labelDados.add(Imagen);
-        PanelDerecho.add(DADO1);
-        
-        DADO2 = new JLabel();
-        //labelDados1.setText("DADO 1");
-        //labelDados1.setFont(new Font(("cooper black"),0,50));
-        DADO2.setBounds(200,PanelDerecho.getHeight()-200, 200, 200);
-        //labelDados1.setBackground(Color.GREEN);
-        DADO2.setIcon(new ImageIcon(DADO_CARA_6.getImage().getScaledInstance(DADO2.getWidth(), DADO2.getHeight(), Image.SCALE_SMOOTH)));
-        DADO2.setOpaque(true);
-        PanelDerecho.add(DADO2);        
-        
-    }//FIN CONSTRUCTOR
-    
-    public void agregarColorTabla(){
     }
     
+    public void inicialVisual(){
+        fichaCuadro1 = new JLabel();
+        fichaCuadro1.setBounds(0,0,19,19);
+        fichaCuadro1.setIcon(new ImageIcon(FICHA1.getImage().getScaledInstance(fichaCuadro1.getWidth(), fichaCuadro1.getHeight(), Image.SCALE_SMOOTH)));
+        cuadro[0][0].add(fichaCuadro1);
+        
+        fichaCuadro2 = new JLabel();
+        fichaCuadro2.setBounds(18,0,19,19);
+        fichaCuadro2.setIcon(new ImageIcon(FICHA2.getImage().getScaledInstance(fichaCuadro2.getWidth(), fichaCuadro2.getHeight(), Image.SCALE_SMOOTH)));
+        cuadro[0][0].add(fichaCuadro2);
+                
+        fichaCuadro3 = new JLabel();
+        fichaCuadro3.setBounds(36,0,19,19);
+        fichaCuadro3.setIcon(new ImageIcon(FICHA3.getImage().getScaledInstance(fichaCuadro3.getWidth(), fichaCuadro3.getHeight(), Image.SCALE_SMOOTH)));
+        cuadro[0][0].add(fichaCuadro3);
+                
+        fichaCuadro4 = new JLabel();
+        fichaCuadro4.setBounds(0,36,19,19);
+        fichaCuadro4.setIcon(new ImageIcon(FICHA4.getImage().getScaledInstance(fichaCuadro4.getWidth(), fichaCuadro4.getHeight(), Image.SCALE_SMOOTH)));
+        cuadro[0][0].add(fichaCuadro4);
+                
+        fichaCuadro5 = new JLabel();
+        fichaCuadro5.setBounds(18,36,19,19);
+        fichaCuadro5.setIcon(new ImageIcon(FICHA5.getImage().getScaledInstance(fichaCuadro5.getWidth(), fichaCuadro5.getHeight(), Image.SCALE_SMOOTH)));
+        cuadro[0][0].add(fichaCuadro5);
+             
+        fichaCuadro6 = new JLabel();
+        fichaCuadro6.setBounds(36,36,19,19);
+        fichaCuadro6.setIcon(new ImageIcon(FICHA6.getImage().getScaledInstance(fichaCuadro6.getWidth(), fichaCuadro6.getHeight(), Image.SCALE_SMOOTH)));
+        cuadro[0][0].add(fichaCuadro6);
+    }
+    
+    public void FICHASvisual(int turno, int moverX, int moverY){
+        
+        switch(turno){
+            case 1:        
+                fichaCuadro1 = new JLabel();
+                fichaCuadro1.setBounds(0,0,19,19);
+                fichaCuadro1.setIcon(new ImageIcon(FICHA1.getImage().getScaledInstance(fichaCuadro1.getWidth(), fichaCuadro1.getHeight(), Image.SCALE_SMOOTH)));                
+                cuadro[1][1].add(fichaCuadro1);
+                
+                break;
+            case 2:
+                fichaCuadro2 = new JLabel();
+                fichaCuadro2.setBounds(18,0,19,19);
+                fichaCuadro2.setIcon(new ImageIcon(FICHA2.getImage().getScaledInstance(fichaCuadro1.getWidth(), fichaCuadro1.getHeight(), Image.SCALE_SMOOTH)));
+                cuadro[2][2].add(fichaCuadro2);
+                break;
+            case 3:
+                fichaCuadro3 = new JLabel();
+                fichaCuadro3.setBounds(36,0,19,19);
+                fichaCuadro3.setIcon(new ImageIcon(FICHA3.getImage().getScaledInstance(fichaCuadro1.getWidth(), fichaCuadro1.getHeight(), Image.SCALE_SMOOTH)));
+                cuadro[moverX][moverY].add(fichaCuadro3);
+                break;
+            case 4:
+                fichaCuadro4 = new JLabel();
+                fichaCuadro4.setBounds(0,36,19,19);
+                fichaCuadro4.setIcon(new ImageIcon(FICHA4.getImage().getScaledInstance(fichaCuadro1.getWidth(), fichaCuadro1.getHeight(), Image.SCALE_SMOOTH)));
+                cuadro[moverX][moverY].add(fichaCuadro4);
+                break;
+            case 5:
+                fichaCuadro5 = new JLabel();
+                fichaCuadro5.setBounds(18,36,19,19);
+                fichaCuadro5.setIcon(new ImageIcon(FICHA5.getImage().getScaledInstance(fichaCuadro1.getWidth(), fichaCuadro1.getHeight(), Image.SCALE_SMOOTH)));
+                cuadro[moverX][moverY].add(fichaCuadro5);
+                break;
+            case 6:
+                fichaCuadro6 = new JLabel();
+                fichaCuadro6.setBounds(36,36,19,19);
+                fichaCuadro6.setIcon(new ImageIcon(FICHA6.getImage().getScaledInstance(fichaCuadro1.getWidth(), fichaCuadro1.getHeight(), Image.SCALE_SMOOTH)));
+                cuadro[moverX][moverY].add(fichaCuadro6);
+                break;            
+        }        
+    }
     public int NumeroCuadro(int fila, int valor){
         
         int numero = valor;
@@ -186,6 +260,65 @@ public class Juego  implements ActionListener{
         }
         return numero;
     }
+    public int SaberXdeCuadros(int numero){        
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (numero == controlNumeroCuadro[i][j]) {
+                    return j;
+                }                
+            }
+        }        
+        return 0;
+    }
+    public int SaberYdeCuadros(int numero){
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if (numero == controlNumeroCuadro[i][j]) {
+                    return i;
+                }     
+            }
+        }                
+        return 0;
+    }
+    int dosveces=1;
+    public void JUGAR(){
+        
+        
+        switch (turnoJugador){
+            case 1:
+                contador1 = sumaDados + contador1;
+                FICHASvisual(turnoJugador, SaberXdeCuadros(contador1), SaberYdeCuadros(contador1));                
+                break;
+            case 2:
+                contador2 = sumaDados + contador2;
+                FICHASvisual(turnoJugador, SaberXdeCuadros(contador2), SaberYdeCuadros(contador2));
+                break;
+            case 3:
+                contador3 = sumaDados + contador3;
+                FICHASvisual(turnoJugador, SaberXdeCuadros(contador3), SaberYdeCuadros(contador3));
+                break;
+            case 4:
+                contador4 = sumaDados + contador4;
+                FICHASvisual(turnoJugador, SaberXdeCuadros(contador4), SaberYdeCuadros(contador4));
+                break;
+            case 5:
+                contador5 = sumaDados + contador5;
+                FICHASvisual(turnoJugador, SaberXdeCuadros(contador5), SaberYdeCuadros(contador5));
+                break;
+            case 6:
+                contador6 = sumaDados + contador6;
+                FICHASvisual(turnoJugador, SaberXdeCuadros(contador6), SaberYdeCuadros(contador6));
+                break;
+            default :
+                contador6 = sumaDados + contador6;
+                FICHASvisual(turnoJugador, SaberXdeCuadros(contador6), SaberYdeCuadros(contador6));
+                break;
+        }
+        if (turnoJugador == 6) {
+             turnoJugador=0;
+        }
+        turnoJugador++;
+    }
 
     @Override
     public void actionPerformed(ActionEvent Presionar) {
@@ -194,14 +327,20 @@ public class Juego  implements ActionListener{
             Regresar();
         }
         if (Presionar.getSource() == TirarDados) {
+
             DADO1.setIcon(new ImageIcon(seleccionDado().getImage().getScaledInstance(DADO1.getWidth(), DADO1.getHeight(), Image.SCALE_SMOOTH)));
-            DADO2.setIcon(new ImageIcon(seleccionDado().getImage().getScaledInstance(DADO2.getWidth(), DADO2.getHeight(), Image.SCALE_SMOOTH)));            
+            DADO2.setIcon(new ImageIcon(seleccionDado().getImage().getScaledInstance(DADO2.getWidth(), DADO2.getHeight(), Image.SCALE_SMOOTH)));
+            
+            sumaDados = suma2Dados;
+            JUGAR();            
+            suma2Dados = 0;
         }
     }
 
     public ImageIcon seleccionDado(){
         int numero = (int)(Math.random()*6);
-        
+        //System.out.println(""+suma2Dados);
+        suma2Dados = suma2Dados + numero + 1;
         switch(numero){
             case 0:
                 return DADO_CARA_1;
@@ -217,11 +356,10 @@ public class Juego  implements ActionListener{
                 return DADO_CARA_6;
             default :
                 return DADO_CARA_6;
-        }
+        }        
     }
     
     private void Regresar() {
-
         Main.inicio.setSize(VentanaInicio.PANEL_MENU_PRINCIPAL.getWidth(), VentanaInicio.PANEL_MENU_PRINCIPAL.getHeight());
         VentanaInicio.ImagenDeFondo.setBounds(0, 0, VentanaInicio.PANEL_MENU_PRINCIPAL.getWidth(), VentanaInicio.PANEL_MENU_PRINCIPAL.getHeight());
         VentanaInicio.ImagenDeFondo.setIcon(new ImageIcon(VentanaInicio.IMAGEN_DE_FONDO.getImage().getScaledInstance(VentanaInicio.ImagenDeFondo.getWidth(), VentanaInicio.ImagenDeFondo.getHeight(), Image.SCALE_SMOOTH)));
@@ -229,6 +367,6 @@ public class Juego  implements ActionListener{
         Main.inicio.setLocationRelativeTo(null);        
         VentanaInicio.PANEL_MENU_PRINCIPAL.setVisible(true);        
         VentanaInicio.PANEL_MENU_JUEGO.setVisible(false);
-        Main.inicio.setTitle("NO SE QUE PONER ACA");
+        Main.inicio.setTitle(" *** REGRESAMOS ***");
     }
 }

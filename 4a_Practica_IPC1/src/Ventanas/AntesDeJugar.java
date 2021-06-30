@@ -1,37 +1,50 @@
-
 package Ventanas;
 
 import Principal.Main;
-import static Ventanas.VentanaInicio.IMAGEN_TABLERO;
-import static Ventanas.VentanaInicio.ImagenDeFondo;
-import static Ventanas.VentanaInicio.PANEL_MENU_JUEGO;
-import static Ventanas.VentanaInicio.PANEL_MENU_PRINCIPAL;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
-public class AntesDeJugar implements ActionListener {
-    
+public class AntesDeJugar implements ActionListener {        
     
     private static JButton JUGAR;
+    private static JButton JUGADOR;
+    private int contador = 0;
+    private int contadorMANDAR=contador;
 
-    public AntesDeJugar(){        
+    public int getContadorMANDAR() {
+        return contadorMANDAR;
+    }
+
+    public AntesDeJugar(){
         
         //BOTON
         JUGAR = new JButton();        
-        JUGAR.setBounds(10, 10, 300, 100);
+        JUGAR.setBounds(40, 10, 400, 100);
         JUGAR.setFont(new Font(("cooper black"),0,50));
         JUGAR.setText("JUGAR");
         JUGAR.addActionListener(this);
         VentanaInicio.PANEL_MENU_DATOS.add(JUGAR);
+        
+        JUGADOR = new JButton();        
+        JUGADOR.setBounds(40, 110, 400, 100);
+        JUGADOR.setFont(new Font(("cooper black"),0,50));
+        JUGADOR.setText("JUGADOR,NEW");
+        JUGADOR.addActionListener(this);
+        VentanaInicio.PANEL_MENU_DATOS.add(JUGADOR);              
+        JUGAR.setEnabled(false);        
     }
 
+    public int getContador() {
+        return contador;
+    }
+    
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) {        
+                
         if (e.getSource() == JUGAR) {            
             
             Main.inicio.setSize(VentanaInicio.PANEL_MENU_JUEGO.getWidth(), VentanaInicio.PANEL_MENU_JUEGO.getHeight());                
@@ -41,8 +54,16 @@ public class AntesDeJugar implements ActionListener {
             Main.inicio.setTitle(" ***  A JUGAR !!! ");
             VentanaInicio.PANEL_MENU_JUEGO.setVisible(true);
             VentanaInicio.PANEL_MENU_DATOS.setVisible(false);
-            Main.inicio.setLocationRelativeTo(null);
-            
+            Main.inicio.setLocationRelativeTo(null);       
+        }
+        
+        if (e.getSource() == JUGADOR) {
+            if (contador >=2) {            
+                JUGAR.setEnabled(true);            
+            }else{
+                JUGAR.setEnabled(false);
+            }            
+            contador++;
         }
     }
 }
